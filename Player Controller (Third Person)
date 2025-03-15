@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class CharacterMovement : MonoBehaviour
+{
+    public float speed = 5f;
+    public float mouseSensitivity = 2f; 
+    public Transform cameraTransform; 
+
+    private float rotationX = 0f;
+
+    void Update()
+    {
+
+        float moveX = 0f;
+        float moveZ = 0f;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveZ = 1f;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            moveZ = -1f;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveX = -1f;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            moveX = 1f;
+        }
+
+        Vector3 moveDirection = transform.right * moveX + transform.forward * moveZ;
+        transform.position += moveDirection.normalized * speed * Time.deltaTime;
+
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        rotationX -= mouseY;
+        rotationX = Mathf.Clamp(rotationX, -45f, 45f);
+
+   
+        transform.Rotate(Vector3.up * mouseX);
+   
+        cameraTransform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+    }
+}
